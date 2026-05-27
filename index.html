@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoSS: Anonymous Project Page</title>
+  <meta property="og:title" content="MoSS: Anonymous Project Page" />
+  <meta property="og:description" content="Modular Sensory Stream for Integrating Physical Feedback in Vision-Language-Action Models" />
+
+  <!-- Fonts and Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <!-- Main stylesheet -->
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <br /><br /><br />
+  <center>
+    <span class="header-text">
+      Modular Sensory Stream for Integrating Physical Feedback in Vision-Language-Action Models
+    </span>
+  </center>
+
+  <br />
+
+  <center>
+    <div class="author-block">
+      <b>Anonymous Authors</b>
+    </div>
+  </center>
+
+  <center>
+    <br />
+    <h2 class="tldr-section">
+      <b>TL;DR:</b>&nbsp; MoSS enables Vision-Language-Action models to jointly leverage multiple physical feedback via modular sensory streams, yielding synergistic gains on contact-rich manipulation.
+    </h2>
+    <br />
+    <div class="image-container">
+      <img id="teaser-image" src="resources/1_teaser.png" alt="Project Teaser" />
+    </div>
+  </center>
+
+  <!-- Abstract -->
+  <div class="docs-section" id="abstract">
+    <center>
+      <h1 class="navbar-heading"><b>Abstract</b></h1>
+    </center>
+    <div class="text-container">
+      <p>
+        Humans understand and interact with the real world by relying on diverse physical feedback beyond visual perception.
+        Motivated by this, recent approaches attempt to incorporate physical sensory signals into Vision-Language-Action models (VLAs).
+        However, they typically focus on a single type of physical signal, failing to capture the heterogeneous and complementary nature of real-world interactions.
+        In this paper, we propose <span class="task-label">MoSS</span>, a <span class="task-label">Mo</span>dular <span class="task-label">S</span>ensory <span class="task-label">S</span>tream framework that adapts VLAs to leverage multiple sensory signals for action prediction.
+        Specifically, we introduce decoupled modality streams that integrate heterogeneous physical signals into the action stream via joint cross-modal self-attention.
+        To enable stable incorporation of new modalities, we adopt a two-stage training scheme that freezes pretrained VLA parameters in the early stage.
+        Furthermore, to better capture contact interaction dynamics, we incorporate an auxiliary task that predicts future physical signals.
+        Through extensive real-world experiments, we demonstrate that MoSS successfully augments VLAs to leverage diverse physical signals (i.e., tactile, force and torque), integrating multiple signals to achieve synergistic performance gains.
+      </p>
+    </div>
+  </div>
+
+  <!-- Method / Overview -->
+  <div class="docs-section" id="method">
+    <center>
+      <h1 class="navbar-heading"><b>Method</b></h1>
+    </center>
+
+    <div class="text-container">
+        <p>
+            <span class="task-label">MoSS</span> is a modular adaptation framework for VLAs that enables scalable integration of multiple physical sensing modalities for contact-rich manipulation.
+            The framework has two core components:
+            (a) <span class="task-label">modular sensory streams</span>, which process each physical signal (e.g., tactile, force, or torque) in parallel and inject them into the pretrained action expert via <span class="task-label">joint cross-modal self-attention</span>, and
+            (b) a <span class="task-label">two-stage training scheme</span>, which first aligns the sensory streams with the frozen pretrained VLA and then jointly fine-tunes all components for coordinated control.
+            In addition, an auxiliary <span class="task-label">future physical-signal prediction objective</span> encourages the model to internalize contact dynamics, allowing heterogeneous sensory inputs to be combined in a synergistic and scalable manner.
+        </p>
+    </div>
+
+    <div class="image-container">
+      <img id="overview-image" src="resources/2_overview.png" alt="Method Overview Diagram" />
+    </div>
+  </div>
+
+  <!-- Hardware Setups -->
+  <div class="docs-section" id="hardware">
+    <center>
+      <h1 class="navbar-heading"><b>Hardware Setups</b></h1>
+    </center>
+
+    <div class="text-container">
+      <p>
+        We evaluate MoSS on two distinct hardware platforms to validate that the framework generalizes across embodiments. The first is a single-arm parallel-jaw setup used for contact-rich manipulation, and the second is a bimanual dexterous setup with per-arm wrist force sensing.
+      </p>
+    </div>
+
+    <div class="hardware-grid">
+      <div class="hardware-col">
+        <img src="resources/3_hardware_franka.png" alt="Platform I: Franka Research 3 with Robotiq 2F-85 gripper" />
+        <h3>Platform I &mdash; Franka + 2F-85 Gripper</h3>
+        <p>
+          A single 7-DoF Franka Research 3 arm equipped with a Robotiq 2F-85 parallel-jaw gripper. Tactile and force/torque feedback are streamed into MoSS for contact-rich single-arm manipulation (Tasks A&ndash;D).
+        </p>
+      </div>
+      <div class="hardware-col">
+        <img src="resources/3_hardware_openarm.png" alt="Platform II: Dual OpenArm with RH56F1 dexterous hands" />
+        <h3>Platform II &mdash; Dual OpenArm + RH56F1 Hands</h3>
+        <p>
+          Two 7-DoF OpenArm manipulators, each equipped with a 6-DoF RH56F1 dexterous hand and a wrist-mounted RH56F1 force sensor. This bimanual dexterous setup is used for tasks that require coordinated two-hand manipulation and weight-aware reasoning (Tasks E and F).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="docs-section" id="results">
+    <center>
+      <h1 class="navbar-heading"><b>Results</b></h1>
+    </center>
+
+    <div class="text-container">
+      <p>We present real-robot demonstrations for each task on both hardware platforms. Use the dropdown menu within each task to select different variants.</p>
+    </div>
+
+    <!-- ============================================
+         PLATFORM I — Franka Research 3 + Robotiq 2F-85
+         ============================================ -->
+    <div class="platform-section" id="platform-franka">
+      <h2 class="platform-heading">Platform I &mdash; Franka + 2F-85 Gripper</h2>
+
+      <!-- Task A: Unstack Cup -->
+      <div class="task-block" id="task-a">
+        <h2 class="task-callout"><span class="task-badge">Task A</span> Unstack Cup</h2>
+        <p class="instruction">
+          <span class="instruction-label">Instruction</span>
+          "Pick up the top red cup from the stack and place it next to the blue cup."
+        </p>
+
+        <div class="variant-selector">
+          <label for="task-a-select">Select Variant:</label>
+          <select id="task-a-select" onchange="switchVariant('task-a', this.value)">
+            <option value="small">Small Cup</option>
+            <option value="large">Large Cup</option>
+          </select>
+        </div>
+
+        <!-- Small variant -->
+        <div class="video-container active" id="task-a-small">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/unstack_cup_small_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/unstack_cup_small_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Large variant -->
+        <div class="video-container" id="task-a-large">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/unstack_cup_large_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/unstack_cup_large_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task B: PnP Egg -->
+      <div class="task-block" id="task-b">
+        <h2 class="task-callout"><span class="task-badge">Task B</span> PnP Egg</h2>
+        <p class="instruction">
+          <span class="instruction-label">Instruction</span>
+          "Pick up the egg and place it in the gold bowl."
+        </p>
+
+        <div class="variant-selector">
+          <label for="task-b-select">Select Variant:</label>
+          <select id="task-b-select" onchange="switchVariant('task-b', this.value)">
+            <option value="random">Random Position</option>
+          </select>
+        </div>
+
+        <!-- Random position variant -->
+        <div class="video-container active" id="task-b-random">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/pnp_egg_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/pnp_egg_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task C: Board Erase -->
+      <div class="task-block" id="task-c">
+        <h2 class="task-callout"><span class="task-badge">Task C</span> Board Erase</h2>
+        <p class="instruction">
+          <span class="instruction-label">Instruction</span>
+          "Use the (red/grey) eraser to clean the whiteboard."
+        </p>
+
+        <div class="variant-selector">
+          <label for="task-c-select">Select Variant:</label>
+          <select id="task-c-select" onchange="switchVariant('task-c', this.value)">
+            <option value="high">Higher Table</option>
+            <option value="low">Lower Table</option>
+          </select>
+        </div>
+
+        <!-- Higher Table -->
+        <div class="video-container active" id="task-c-high">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/board_erase_high_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/board_erase_high_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lower Table -->
+        <div class="video-container" id="task-c-low">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/board_erase_low_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/board_erase_low_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task D: Plug Insertion -->
+      <div class="task-block" id="task-d">
+        <h2 class="task-callout"><span class="task-badge">Task D</span> Plug Insertion</h2>
+        <p class="instruction">
+          <span class="instruction-label">Instruction</span>
+          "Pick up the (yellow/white/black) charger and plug it into the socket."
+        </p>
+
+        <div class="variant-selector">
+          <label for="task-d-select">Select Variant:</label>
+          <select id="task-d-select" onchange="switchVariant('task-d', this.value)">
+            <option value="white">White Plug</option>
+            <option value="yellow">Yellow Plug</option>
+            <option value="black">Black Plug</option>
+          </select>
+        </div>
+
+        <!-- White variant -->
+        <div class="video-container active" id="task-d-white">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/plug_insertion_white_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/plug_insertion_white_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yellow variant -->
+        <div class="video-container" id="task-d-yellow">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/plug_insertion_yellow_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/plug_insertion_yellow_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Black variant -->
+        <div class="video-container" id="task-d-black">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/franka_gripper/plug_insertion_black_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/franka_gripper/plug_insertion_black_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /platform-franka -->
+
+    <!-- ============================================
+         PLATFORM II — Dual OpenArm + RH56F1 Hands
+         ============================================ -->
+    <div class="platform-section" id="platform-openarm">
+      <h2 class="platform-heading">Platform II &mdash; Dual OpenArm + RH56F1 Hands</h2>
+
+      <!-- Task E: Pick Paper -->
+      <div class="task-block" id="task-e">
+        <h2 class="task-callout"><span class="task-badge">Task E</span> Pick Paper</h2>
+        <p class="instruction">
+          <span class="instruction-label">Instruction</span>
+          "Pick up the paper (napkin)."
+        </p>
+
+        <div class="variant-selector">
+          <label for="task-e-select">Select Variant:</label>
+          <select id="task-e-select" onchange="switchVariant('task-e', this.value)">
+            <option value="yellow-lower">Yellow Paper on Lower Table</option>
+            <option value="yellow-higher">Yellow Paper on Higher Table</option>
+            <option value="white-lower">White Paper on Lower Table</option>
+            <option value="white-higher">White Paper on Higher Table</option>
+            <option value="napkin-lower">Napkin on Lower Table</option>
+            <option value="napkin-higher">Napkin on Higher Table</option>
+          </select>
+        </div>
+
+        <!-- Yellow Paper · Lower Table -->
+        <div class="video-container active" id="task-e-yellow-lower">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_yellow_lower_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_yellow_lower_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yellow Paper · Higher Table -->
+        <div class="video-container" id="task-e-yellow-higher">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_yellow_higher_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_yellow_higher_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- White Paper · Lower Table -->
+        <div class="video-container" id="task-e-white-lower">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_white_lower_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_white_lower_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- White Paper · Higher Table -->
+        <div class="video-container" id="task-e-white-higher">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_white_higher_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_white_higher_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Napkin · Lower Table -->
+        <div class="video-container" id="task-e-napkin-lower">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_napkin_lower_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_napkin_lower_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Napkin · Higher Table -->
+        <div class="video-container" id="task-e-napkin-higher">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_napkin_higher_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/pick_paper_napkin_higher_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task F: Sort by Weight -->
+      <div class="task-block" id="task-f">
+        <h2 class="task-callout"><span class="task-badge">Task F</span> Sort by Weight</h2>
+        <p class="instruction">
+          <span class="instruction-label">Instruction</span>
+          "Place the bag on the right if heavy, and on the left if light."
+        </p>
+
+        <div class="variant-selector">
+          <label for="task-f-select">Select Variant:</label>
+          <select id="task-f-select" onchange="switchVariant('task-f', this.value)">
+            <option value="empty">Empty Bag</option>
+            <option value="1juice">Bag with 1 Juice</option>
+            <option value="2juice">Bag with 2 Juices</option>
+          </select>
+        </div>
+
+        <!-- Empty Bag -->
+        <div class="video-container active" id="task-f-empty">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/sort_weight_empty_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/sort_weight_empty_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1 Juice -->
+        <div class="video-container" id="task-f-1juice">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/sort_weight_1juice_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/sort_weight_1juice_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Juices -->
+        <div class="video-container" id="task-f-2juice">
+          <div class="video-grid">
+            <div class="video-item">
+              <video src="videos/openarm_hands/sort_weight_2juice_failure.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-failure">GR00T N1.5 (Failure)</div>
+            </div>
+            <div class="video-item">
+              <video src="videos/openarm_hands/sort_weight_2juice_success.mp4" playsinline muted loop controls preload="metadata"></video>
+              <div class="video-caption video-label-success">GR00T N1.5 + MoSS (Ours; Success)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /platform-openarm -->
+
+  </div>
+
+  <br /><br /><br /><br />
+
+  <!-- JavaScript for dropdown switching -->
+  <script>
+    function switchVariant(taskId, variantValue) {
+      // Hide all video containers for this task
+      const taskBlock = document.getElementById(taskId);
+      const containers = taskBlock.querySelectorAll('.video-container');
+      containers.forEach(container => {
+        container.classList.remove('active');
+        // Pause all videos when hiding
+        const videos = container.querySelectorAll('video');
+        videos.forEach(video => video.pause());
+      });
+
+      // Show the selected variant
+      const selectedContainer = document.getElementById(taskId + '-' + variantValue);
+      if (selectedContainer) {
+        selectedContainer.classList.add('active');
+      }
+    }
+
+    // Initialize: ensure first option is selected for each task
+    document.addEventListener('DOMContentLoaded', function() {
+      const selects = document.querySelectorAll('.variant-selector select');
+      selects.forEach(select => {
+        const taskId = select.id.replace('-select', '');
+        switchVariant(taskId, select.value);
+      });
+    });
+  </script>
+</body>
+</html>
